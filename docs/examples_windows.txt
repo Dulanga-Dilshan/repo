@@ -1,0 +1,20 @@
+# help
+repo -h
+
+# basic folder genaration
+repo -p ab? -r {1,5} 
+
+#   Generates
+#   ab1 , ab2 , ab3 , ab4 , ab5
+
+
+#basic file renaming
+repo -re -p "file ]" -r {A,C}
+
+#   renames
+#   file A, file B, file C
+
+
+
+
+

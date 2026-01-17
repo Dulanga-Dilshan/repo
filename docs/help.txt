@@ -1,0 +1,163 @@
+repo — Command Line Help
+
+==================================================
+NAME
+==================================================
+
+repo - folder and file pattern generator and renamer
+
+--------------------------------------------------
+SYNOPSIS
+--------------------------------------------------
+
+repo [options] -p <pattern> -r <range>
+
+--------------------------------------------------
+DESCRIPTION
+--------------------------------------------------
+
+repo is a command-line tool for generating and renaming files or folders using
+explicit patterns combined with user-defined ranges.
+
+Each placeholder in the pattern corresponds to a range definition. The tool
+iterates over all valid combinations in a predictable order and generates or
+renames files accordingly.
+
+repo is designed to be explicit, deterministic, and suitable for scripting.
+
+--------------------------------------------------
+PATTERN PLACEHOLDERS
+--------------------------------------------------
+
+?   Numeric digit (0–9)
+<   Lowercase letter (a–z)
+>   Uppercase letter (A–Z)
+
+Literal characters in the pattern are preserved as-is.
+
+Example:
+Pattern: file_?<>
+
+--------------------------------------------------
+RANGE SYNTAX
+--------------------------------------------------
+
+(char_type){start,end[,increment]}
+
+Where:
+- char_type   One of ?, <, or > (must match a placeholder)
+- start       Starting value of the range
+- end         Ending value of the range
+- increment   Optional step value (default: 1)
+
+Examples:
+?{0,9}
+<{a,f}
+>{A,Z,2}
+
+Each placeholder in the pattern must have a corresponding range definition.
+
+--------------------------------------------------
+OPTIONS
+--------------------------------------------------
+
+-p <pattern>
+    Set the pattern for file or folder names.
+
+-r <range>
+    Define ranges for each pattern placeholder.
+    Multiple ranges are separated by spaces.
+
+-z
+    Enable zero padding for numeric placeholders.
+
+-re
+    Rename existing files instead of generating new ones.
+
+-e
+    Edit generated names before creation or rename.
+
+-h, --help
+    Display this help message.
+
+--------------------------------------------------
+FILE FILTERING OPTIONS
+--------------------------------------------------
+
+-x <ext...>
+    Include only files with the listed extensions.
+
+-image, -img
+    Include only image files.
+
+-video, -vid
+    Include only video files.
+
+-audio
+    Include only audio files.
+
+-document, -doc
+    Include only document files.
+
+Filtering is applied before rename or generation.
+
+--------------------------------------------------
+EXAMPLES
+--------------------------------------------------
+
+Generate files with numeric suffix:
+
+repo -p file_? -r ?{0,4}
+
+Output:
+file_0.txt
+file_1.txt
+...
+file_4.txt
+
+--------------------------------------------------
+
+Generate zero-padded numbers:
+
+repo -z -p file_? -r ?{0,12}
+
+Output:
+file_00.txt
+file_01.txt
+...
+file_12.txt
+
+--------------------------------------------------
+
+Rename existing files using mixed ranges:
+
+repo -re -p img_<> -r <{a,b} >{A,B}
+
+Output:
+img_aA.jpg
+img_aB.jpg
+...
+img_bB.jpg
+
+--------------------------------------------------
+EXIT STATUS
+--------------------------------------------------
+
+0   Success
+1   Invalid input or parsing error
+2   Runtime failure
+
+--------------------------------------------------
+NOTES
+--------------------------------------------------
+
+- repo performs no shell expansion.
+- All iteration order is deterministic.
+- Invalid configurations fail early with clear errors.
+
+--------------------------------------------------
+AUTHOR
+--------------------------------------------------
+
+repo was written as a low-level C project focusing on explicit parsing,
+iteration control, and predictable behavior.
