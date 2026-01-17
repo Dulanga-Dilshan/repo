@@ -2,7 +2,13 @@ cc = gcc
 target = bin/repo
 flags = -Wall -static -Iinclude -Wextra
 
-all : final
+all : obj bin final
+
+obj : 
+	mkdir -p obj
+
+bin : 
+	mkdir -p bin
 
 final : obj/fname.o obj/linkedlist.o obj/os.o obj/token.o obj/main.o
 	$(cc) $(flags) -o $(target) obj/fname.o obj/linkedlist.o obj/os.o obj/token.o obj/main.o
